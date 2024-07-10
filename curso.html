@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App VPN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #cookieConsent {
+            background-color: rgba(20, 20, 20, 0.8);
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: none;
+            text-align: center;
+            z-index: 1000;
+        }
+        #cookieConsent button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>App VPN</h1>
+        <p>Clique no botão abaixo para conectar-se à VPN:</p>
+        <button id="connectBtn">Conectar à VPN</button>
+        <button id="disconnectBtn">Desconectar da VPN</button>
+    </div>
+
+    <div id="cookieConsent">
+        Este site usa cookies para garantir que você obtenha a melhor experiência. <button id="acceptCookies">Aceitar</button>
+    </div>
+
+    <script>
+        document.getElementById('connectBtn').addEventListener('click', function() {
+            fetch('/connect-vpn')
+                .then(response => response.json())
+                .then(data => {
+                    alert('Conectado à VPN');
+                })
+                .catch(error => {
+                    console.error('Erro ao conectar à VPN:', error);
+                });
+        });
+
+        document.getElementById('disconnectBtn').addEventListener('click', function() {
+            fetch('/disconnect-vpn')
+                .then(response => response.json())
+                .then(data => {
+                    alert('Desconectado da VPN');
+                })
+                .catch(error => {
+                    console.error('Erro ao desconectar da VPN:', error);
+                });
+        });
+
+        window.onload = function() {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookieConsent').style.display = 'block';
+            }
+        };
+
+        document.getElementById('acceptCookies').addEventListener('click', function() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieConsent').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
